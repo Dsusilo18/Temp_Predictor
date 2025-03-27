@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Weather High Temperature Predictor</title>
+</head>
+<body>
+    <h1>Weather High Temperature Predictor</h1>
+    <form id="weatherForm">
+        <label>Location: <input type="text" id="location" required></label><br>
+        <label>Time: <input type="time" id="time" required></label><br>
+        <label>Cloud Cover (%): <input type="number" id="clouds" required></label><br>
+        <label>Dew Point (Farenheit): <input type="number" id="dewPoint" required></label><br>
+        <label>Humidity (%): <input type="number" id="humidity" required></label><br>
+        <label>Wind Chill (Farenheit): <input type="number" id="windChill" required></label><br>
+        <label>Wind Direction: <input type="number" id="windDirection" required></label><br>
+        <label>Wind Speed (mph): <input type="number" id="windSpeed" required></label><br>
+        <label>Peak UV Index: <input type="number" id="peakUV" required></label><br>
+        <label>Peak Temperature (Farenheit): <input type="number" id="peakTemp" required></label><br>
+        <label>Time of Peak UV/Temp: <input type="time" id="peakTime" required></label><br>
+        <label>Current UV Index: <input type="number" id="currentUV" required></label><br>
+
+        <button type="button" onclick="submitWeather()">Predict Temperature</button>
+    </form>
+
+    <h2>Temperature Range Predictions:</h2>
+    <div id="predictions"></div>
+
+    <script>
+        async function submitWeather() {
+            const data = {
+                location: document.getElementById("location").value,
+                time: document.getElementById("time").value,
+                clouds: parseFloat(document.getElementById("clouds").value),
+                dewPoint: parseFloat(document.getElementById("dewPoint").value),
+                humidity: parseFloat(document.getElementById("humidity").value),
+                windChill: parseFloat(document.getElementById("windChill").value),
+                windSpeed: parseFloat(document.getElementById("windSpeed").value),
+                peakUV: parseFloat(document.getElementById("peakUV").value),
+                peakTemp: parseFloat(document.getElementById("peakTemp").value),
+                peakTime: document.getElementById("peakTime").value,
+                currentUV: parseFloat(document.getElementById("currentUV").value),
+            };
+            const response = await fetch("/preditc", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            document.getElementById("predictions").innerHTML = result.predictions || "Failed to get prediction.";
+        }
+    </script>
+</body>
+</html>
